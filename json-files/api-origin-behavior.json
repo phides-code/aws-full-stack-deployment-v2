@@ -1,0 +1,65 @@
+{
+  "origin": {
+    "Id": "ORIGIN_ID",
+    "DomainName": "ORIGIN_ID",
+    "OriginPath": "",
+    "CustomHeaders": {
+      "Quantity": 1,
+      "Items": [
+        {
+          "HeaderName": "X-CF-Token",
+          "HeaderValue": "CF_TOKEN"
+        }
+      ]
+    },
+    "CustomOriginConfig": {
+      "HTTPPort": 80,
+      "HTTPSPort": 443,
+      "OriginProtocolPolicy": "https-only",
+      "OriginSslProtocols": {
+        "Quantity": 1,
+        "Items": ["TLSv1.2"]
+      },
+      "OriginReadTimeout": 30,
+      "OriginKeepaliveTimeout": 5
+    },
+    "ConnectionAttempts": 3,
+    "ConnectionTimeout": 10,
+    "OriginShield": {
+      "Enabled": false
+    }
+  },
+  "cacheBehaviors": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "PathPattern": "PATH_PATTERN",
+        "TargetOriginId": "ORIGIN_ID",
+        "ViewerProtocolPolicy": "redirect-to-https",
+        "AllowedMethods": {
+          "Quantity": 7,
+          "Items": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+          "CachedMethods": {
+            "Quantity": 2,
+            "Items": ["GET", "HEAD"]
+          }
+        },
+        "SmoothStreaming": false,
+        "Compress": false,
+        "LambdaFunctionAssociations": {
+          "Quantity": 0
+        },
+        "FunctionAssociations": {
+          "Quantity": 0
+        },
+        "FieldLevelEncryptionId": "",
+        "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+        "OriginRequestPolicyId": "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf",
+        "TrustedKeyGroups": {
+          "Enabled": false,
+          "Quantity": 0
+        }
+      }
+    ]
+  }
+}

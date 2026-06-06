@@ -131,6 +131,14 @@ gh_watch_last_run_no_prompt() {
     env GH_PAGER="cat" gh run watch "$run_id" --exit-status
 }
 
+mv_if_different() {
+    local src="$1"
+    local dest="$2"
+    if [ "$src" != "$dest" ] && [ -e "$src" ]; then
+        mv "$src" "$dest"
+    fi
+}
+
 echo "=== AWS Full Stack Project Setup ==="
 
 # Check if the user provided two arguments
@@ -242,12 +250,12 @@ find . -type f -exec sed -i "s/banana/$lowercase_table_name/g" {} +
 find . -type f -exec sed -i "s/Banana/$camelcase_table_name/g" {} +
 
 ## rename every file containing "banana" to "$lowercase_table_name"
-mv internal/handler/banana_handler.go internal/handler/"$lowercase_table_name"_handler.go
-mv internal/handler/banana_handler_test.go internal/handler/"$lowercase_table_name"_handler_test.go
-mv internal/dynamodb/banana_repository.go internal/dynamodb/"$lowercase_table_name"_repository.go
-mv internal/domain/banana_repository.go internal/domain/"$lowercase_table_name"_repository.go
-mv internal/domain/banana.go internal/domain/"$lowercase_table_name".go
-mv internal/domain/banana_test.go internal/domain/"$lowercase_table_name"_test.go
+mv_if_different internal/handler/banana_handler.go internal/handler/"$lowercase_table_name"_handler.go
+mv_if_different internal/handler/banana_handler_test.go internal/handler/"$lowercase_table_name"_handler_test.go
+mv_if_different internal/dynamodb/banana_repository.go internal/dynamodb/"$lowercase_table_name"_repository.go
+mv_if_different internal/domain/banana_repository.go internal/domain/"$lowercase_table_name"_repository.go
+mv_if_different internal/domain/banana.go internal/domain/"$lowercase_table_name".go
+mv_if_different internal/domain/banana_test.go internal/domain/"$lowercase_table_name"_test.go
 
 # create GitHub repo
 echo "Setting up GitHub repository..."
@@ -305,14 +313,14 @@ find . -type f -exec sed -i "s/banana/$lowercase_table_name/g" {} +
 find . -type f -exec sed -i "s/Banana/$camelcase_table_name/g" {} +
 find . -type f -exec sed -i "s/BANANA/$uppercase_table_name/g" {} +
 
-mv src/features/bananas/AddBanana.tsx src/features/bananas/Add"$camelcase_table_name".tsx
-mv src/features/bananas/BananaHeader.tsx src/features/bananas/"$camelcase_table_name"Header.tsx
-mv src/features/bananas/BananaListItem.tsx src/features/bananas/"$camelcase_table_name"ListItem.tsx
-mv src/features/bananas/bananasApiSlice.ts src/features/bananas/"$lowercase_table_name"sApiSlice.ts
-mv src/features/bananas/Bananas.tsx src/features/bananas/"$camelcase_table_name"s.tsx
-mv src/features/bananas/ListBananas.tsx src/features/bananas/List"$camelcase_table_name"s.tsx
-mv src/features/bananas/ViewBanana.tsx src/features/bananas/View"$camelcase_table_name".tsx
-mv src/features/bananas src/features/"$lowercase_table_name"s
+mv_if_different src/features/bananas/AddBanana.tsx src/features/bananas/Add"$camelcase_table_name".tsx
+mv_if_different src/features/bananas/BananaHeader.tsx src/features/bananas/"$camelcase_table_name"Header.tsx
+mv_if_different src/features/bananas/BananaListItem.tsx src/features/bananas/"$camelcase_table_name"ListItem.tsx
+mv_if_different src/features/bananas/bananasApiSlice.ts src/features/bananas/"$lowercase_table_name"sApiSlice.ts
+mv_if_different src/features/bananas/Bananas.tsx src/features/bananas/"$camelcase_table_name"s.tsx
+mv_if_different src/features/bananas/ListBananas.tsx src/features/bananas/List"$camelcase_table_name"s.tsx
+mv_if_different src/features/bananas/ViewBanana.tsx src/features/bananas/View"$camelcase_table_name".tsx
+mv_if_different src/features/bananas src/features/"$lowercase_table_name"s
 
 ### Generate random ID for CloudFront CallerReference and S3 bucket name
 random_id=$(head -c 64 /dev/urandom | md5sum | awk '{print $1}')

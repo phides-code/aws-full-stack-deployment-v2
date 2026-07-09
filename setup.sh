@@ -250,12 +250,12 @@ find . -type f -exec sed -i "s/banana/$lowercase_table_name/g" {} +
 find . -type f -exec sed -i "s/Banana/$camelcase_table_name/g" {} +
 
 ## rename every file containing "banana" to "$lowercase_table_name"
-mv_if_different internal/handler/banana_handler.go internal/handler/"$lowercase_table_name"_handler.go
-mv_if_different internal/handler/banana_handler_test.go internal/handler/"$lowercase_table_name"_handler_test.go
-mv_if_different internal/dynamodb/banana_repository.go internal/dynamodb/"$lowercase_table_name"_repository.go
-mv_if_different internal/domain/banana_repository.go internal/domain/"$lowercase_table_name"_repository.go
-mv_if_different internal/domain/banana.go internal/domain/"$lowercase_table_name".go
-mv_if_different internal/domain/banana_test.go internal/domain/"$lowercase_table_name"_test.go
+mv_if_different internal/banana/banana.go internal/banana/"$lowercase_table_name".go 
+mv_if_different internal/banana/banana_test.go internal/banana/"$lowercase_table_name"_test.go
+mv_if_different internal/testutil/banana_fixtures.go internal/testutil/"$lowercase_table_name"_fixtures.go
+
+## rename directory internal/banana
+mv internal/banana internal/"$lowercase_table_name"
 
 # create GitHub repo
 echo "Setting up GitHub repository..."
@@ -287,6 +287,12 @@ gh_repo_create_with_retry "$service_name" "$selected_visibility" "."
 
 # Generate and save a random AWS_CF_TOKEN token
 AWS_CF_TOKEN=$(head -c 64 /dev/urandom | md5sum | awk '{print $1}')
+
+# Local SAM env vars for the backend Lambda function
+jq -n \
+    --arg fn "${camel_case_project_name}BackendFunction" \
+    --arg token "$AWS_CF_TOKEN" \
+    '{($fn): {AWS_CF_TOKEN: $token}}' > env.json
 
 # setup AWS secrets in GitHub
 echo "Adding AWS secrets to GitHub repo..."

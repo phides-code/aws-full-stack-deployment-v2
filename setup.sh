@@ -245,6 +245,7 @@ echo "Replacing template variables in backend files..."
 find . -type f -exec sed -i "s/Appname/$camel_case_project_name/g" {} +
 find . -type f -exec sed -i "s/appname/$lowercase_project_name/g" {} +
 find . -type f -exec sed -i "s/us-east-1/$AWS_REGION/g" {} +
+find . -type f -exec sed -i "s/go-multi-api/$service_name/g" {} +
 
 find . -type f -exec sed -i "s/banana/$lowercase_table_name/g" {} +
 find . -type f -exec sed -i "s/Banana/$camelcase_table_name/g" {} +
